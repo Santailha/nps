@@ -175,7 +175,15 @@
                             celulaNome.innerHTML = nome;
                             celulaTelefone.innerHTML = telefone;
 
-                            const mensagemNPS = `Olá ${nome}, tudo bem? Em uma escala de 0 a 10, o quanto você recomendaria a Santa Ilha para um amigo ou familiar?`;
+                            const mensagemNPS = `Olá, ${nome}, tudo bem? 
+                            Meu nome é Alysson Silveira, sou da equipe de Sucesso do Cliente da Santa Ilha Imóveis.
+                            Gostaríamos de saber como foi sua experiência, especialmente junto ao setor de Pré -
+                            atendimento (SDR)? ঒ওঔকখ
+                            Sua opinião é extremamente importante para que possamos conƟnuar aprimorando nossos
+                            serviços.
+                            De 0 a 10, qual a probabilidade de você recomendar a Santa Ilha Imóveis a um amigo ou
+                            familiar?
+                            Agradecemos desde já por comparƟlhar sua avaliação! ঒`;
                             const linkWhatsApp = `https://api.whatsapp.com/send?phone=${telefone}&text=${encodeURIComponent(mensagemNPS)}`;
 
                             const botaoEnviar = document.createElement('a');
