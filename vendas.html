@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPS Santa Ilha</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F4F4F4;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #003366;
+            color: #FFFFFF;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #importacao, #lista-contatos, #acoes {
+            background-color: #FFFFFF;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1, h2 {
+            color: #003366;
+        }
+
+        input[type="file"] {
+            border: 2px dashed #003366;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        input[type="file"]:hover {
+            background-color: #f9f9f9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #DDDDDD;
+            text-align: left;
+        }
+
+        th {
+            background-color: #F4F4F4;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .btn-whatsapp {
+            background-color: #4CAF50;
+            color: #FFFFFF;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #45a049;
+        }
+
+        .botoes-acao {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .botoes-acao button {
+            background-color: #003366;
+            color: #FFFFFF;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .botoes-acao button:hover {
+            background-color: #004488;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Pesquisa de NPS - Santa Ilha</h1>
+    </header>
+    <main>
+        <section id="acoes">
+            <h2>Ações Rápidas</h2>
+            <div class="botoes-acao">
+                <a href="manutencao.html">
+                <button>Manutenção</button>
+                </a>
+                <a href="rescisao.html">
+                <button>Rescisão</button>
+                </a>
+                <a href="locacao.html">
+                <button>Locação</button>
+                </a>
+                <a href="captacao.html">
+                <button>Captação de imóveis</button>
+                </a>
+                <a href="vendas.html">
+                <button>Vendas</button>
+                </a>
+            </div>
+        </section>
+
+        <section id="importacao">
+            <h2>Importar Lista de Contatos (.csv)</h2>
+            <p>Selecione um arquivo .csv com as colunas "Nome" e "Telefone".</p>
+            <input type="file" id="arquivoCsv" accept=".csv">
+        </section>
+        
+        <section id="lista-contatos">
+            <h2>Contatos Importados</h2>
+            <table id="tabela-contatos">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        document.getElementById('arquivoCsv').addEventListener('change', function(e) {
+            const leitor = new FileReader();
+            
+            leitor.onload = function(evento) {
+                const linhas = evento.target.result.split('\n');
+                const tabela = document.getElementById('tabela-contatos').getElementsByTagName('tbody')[0];
+                
+                tabela.innerHTML = '';
+
+                for (let i = 1; i < linhas.length; i++) { 
+                    const linhaAtual = linhas[i].trim();
+                    if (linhaAtual) {
+                        const colunas = linhaAtual.split(',');
+                        
+                        if (colunas.length >= 2) {
+                            const nome = colunas[0].trim();
+                            const telefone = colunas[1].trim();
+
+                            const novaLinha = tabela.insertRow();
+                            const celulaNome = novaLinha.insertCell();
+                            const celulaTelefone = novaLinha.insertCell();
+                            const celulaAcao = novaLinha.insertCell();
+
+                            celulaNome.innerHTML = nome;
+                            celulaTelefone.innerHTML = telefone;
+
+                            const mensagemNPS = `Olá, ${nome}, tudo bem? 
+                            Meu nome é Alysson Silveira, sou da equipe de Sucesso do Cliente da Santa Ilha Imóveis.
+                            Gostaríamos de saber como foi sua experiência, especialmente junto ao setor de Vendas?
+                            Sua opinião é extremamente importante para que possamos continuar aprimorando nossos
+                            serviços.
+                            De 0 a 10, qual a probabilidade de você recomendar a Santa Ilha Imóveis a um amigo ou
+                            familiar?
+                            Agradecemos desde já por compartilhar sua avaliação!`;
+                            const linkWhatsApp = `https://api.whatsapp.com/send?phone=${telefone}&text=${encodeURIComponent(mensagemNPS)}`;
+
+                            const botaoEnviar = document.createElement('a');
+                            botaoEnviar.href = linkWhatsApp;
+                            botaoEnviar.target = '_blank';
+                            botaoEnviar.className = 'btn-whatsapp';
+                            botaoEnviar.innerText = 'Enviar';
+                            celulaAcao.appendChild(botaoEnviar);
+                        }
+                    }
+                }
+            };
+            
+            leitor.readAsText(e.target.files[0]);
+        });
+    </script>
+</body>
+</html>
