@@ -27,7 +27,7 @@
             margin: 0 auto;
         }
 
-        #importacao, #lista-contatos {
+        #importacao, #lista-contatos, #acoes {
             background-color: #FFFFFF;
             padding: 20px;
             margin-bottom: 20px;
@@ -88,6 +88,26 @@
         .btn-whatsapp:hover {
             background-color: #45a049;
         }
+
+        .botoes-acao {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .botoes-acao button {
+            background-color: #003366;
+            color: #FFFFFF;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .botoes-acao button:hover {
+            background-color: #004488;
+        }
     </style>
 </head>
 <body>
@@ -95,11 +115,23 @@
         <h1>Pesquisa de NPS - Santa Ilha</h1>
     </header>
     <main>
+        <section id="acoes">
+            <h2>Ações Rápidas</h2>
+            <div class="botoes-acao">
+                <button>Manutenção</button>
+                <button>Rescisão</button>
+                <button>Locação</button>
+                <button>Captação de Imóveis</button>
+                <button>Vendas</button>
+            </div>
+        </section>
+
         <section id="importacao">
             <h2>Importar Lista de Contatos (.csv)</h2>
             <p>Selecione um arquivo .csv com as colunas "Nome" e "Telefone".</p>
             <input type="file" id="arquivoCsv" accept=".csv">
         </section>
+        
         <section id="lista-contatos">
             <h2>Contatos Importados</h2>
             <table id="tabela-contatos">
@@ -124,13 +156,11 @@
                 const linhas = evento.target.result.split('\n');
                 const tabela = document.getElementById('tabela-contatos').getElementsByTagName('tbody')[0];
                 
-                // Limpa a tabela antes de adicionar novas linhas
                 tabela.innerHTML = '';
 
-                // Itera sobre as linhas, começando da segunda (pula o cabeçalho)
                 for (let i = 1; i < linhas.length; i++) { 
-                    const linhaAtual = linhas[i].trim(); // Remove espaços em branco
-                    if (linhaAtual) { // Ignora linhas vazias
+                    const linhaAtual = linhas[i].trim();
+                    if (linhaAtual) {
                         const colunas = linhaAtual.split(',');
                         
                         if (colunas.length >= 2) {
@@ -145,15 +175,12 @@
                             celulaNome.innerHTML = nome;
                             celulaTelefone.innerHTML = telefone;
 
-                            // Mensagem de NPS
                             const mensagemNPS = `Olá ${nome}, tudo bem? Em uma escala de 0 a 10, o quanto você recomendaria a Santa Ilha para um amigo ou familiar?`;
-                            // Formata o link do WhatsApp
                             const linkWhatsApp = `https://api.whatsapp.com/send?phone=${telefone}&text=${encodeURIComponent(mensagemNPS)}`;
 
-                            // Cria o botão de envio
                             const botaoEnviar = document.createElement('a');
                             botaoEnviar.href = linkWhatsApp;
-                            botaoEnviar.target = '_blank'; // Abre em uma nova aba
+                            botaoEnviar.target = '_blank';
                             botaoEnviar.className = 'btn-whatsapp';
                             botaoEnviar.innerText = 'Enviar';
                             celulaAcao.appendChild(botaoEnviar);
@@ -162,7 +189,6 @@
                 }
             };
             
-            // Lê o arquivo selecionado como texto
             leitor.readAsText(e.target.files[0]);
         });
     </script>
